@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+        <script src="bootstrap/js/jquery.js"></script>  
+        <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script>
+            $(function() {
+
+                var selectBox = $("select").selectBoxIt();
+                $("#fname").append(gpbn('user'));
+                retriveDialog(gpbn('user'));
+            });
+            
+            function retriveDialog(fname)
+            {
+                var regno = window.localStorage.getItem("regno");
+                $.ajax({
+                    url: 'http://192.168.92.1/mec/retrieveDialog.php?regno='+escape(regno)+'&fname='+fname,
+                    dataType: 'json',
+                    timeout: 15000,
+                    success: function(data, status){
+                        $("#messages").html("");
+                        data = data.split("#$@");
+                        for (var key=0; key<data.length-1; key++) {
+                            var message = data[key].substring(4, data[key].length);
+                            var by = data[key].substring(0, 1);
+                            if(by == '>'){
+                                by = fname;
+                            } else {
+                                by = 'you';
+                            }
+                            $("#messages").append('<div class="accordion-group"><div class="accordion-heading"><div style="color:#000000" class="accordion-toggle" data-parent="#accordion2"></div></div><div style="margin-left:25px"><p>'+message+'</p><h6>By '+by+'</h6></div></div>');
+                        }
+                    },
+                    error: function (request, status, error) { 
+                        alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                    }	
+			
+                });
+            }
+            
+            function gpbn(name)//get parameter by name
+            {
+                name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                var regexS = "[\\?&]" + name + "=([^&#]*)";
+                var regex = new RegExp(regexS);
+                var results = regex.exec(window.location.search);
+                if(results == null)
+                    return "";
+                else
+                    return decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            
+        </script>
+    </head>
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="margin-left:25px;margin-top:20px">
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+                                </ul>
+                            </li>  
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li>
+                                <a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                    <i class="icon-envelope" style="margin-top:8px"></i>
+                                </a>
+                            </li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li style="margin-left:10px"><H4>View Message</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <div style="color:#000000" class="accordion-toggle" id="fname">
+                    <img src="demo.jpg" class="img-rounded" style="height:45px;width:45px">
+                </div>
+            </div>
+
+            <div class="accordion" id="messages">
+                <div class="loading">Loading conversation</div>
+            </div>
+            
+        </div>
+    </body>
+</html>

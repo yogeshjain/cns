@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <style type="text/css">
+            .feedtitle{
+                display:block;
+                padding: 10px;
+                font-size: 20px;
+                font-weight: bold;
+                box-shadow: 0 0 2px black;
+            }
+            .feedbody{
+                display:block;
+                padding: 0px 5px 5px 10px;
+                font-size: 18px;
+            }
+        </style>
+        <script>
+            $(function() {
+
+                var selectBox = $("select").selectBoxIt();
+                getEvents();
+
+            });
+            
+            function getEvents()
+            {
+                var regno = window.localStorage.getItem("regno");
+                var arg;
+                if(isNaN(regno)){//prof
+                    arg = '?regno='+escape(regno)+'&isProf=true';
+                } else {
+                    arg = '?regno='+escape(regno);
+                }
+                $.ajax({
+                    url: 'http://192.168.92.1/mec/upcomingevents.php'+arg,
+                    dataType: 'text',
+                    timeout: 15000,
+                    success: function(data, status){
+                        console.log(data);
+                        $("#feeds").html("");
+                        posts = data.split("#@$");
+                        for(var i=0;i<posts.length-1;i++){
+                            var post = posts[i].split("%%");
+                            var feedbody = detectLinks(post[1]);
+                            var time = post[2].split(" ");
+                            if(time[1]=="00:00:00"){
+                                time = time[0];
+                            } else {
+                                time = time[0]+"  "+time[1].split(":")[0]+":"+time[1].split(":")[1];
+                            }
+                            $("#feeds").append("<div class='accordion accordion-group' style='margin-bottom:5px;'><div class='feedtitle accordion-heading' style='background-color:#ADADAD;'>"+post[0]+"<h6 class='pull-right' style='color:#000000'>"+time+"</h6></div><div class='feedbody' style='margin-top:10px;'>"+feedbody+"<div style='display:block; margin:5px;'> &nbsp;<p style='float:right; display:block; font-size:14px; color:#777777; border:2px dashed black; padding:3px; font-weight:bold;'>Organised by: "+post[3]+"</p></div></div></div>");
+                        }
+                    },
+                    error: function (request, status, error) { 
+                        alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                    }	
+			
+                });
+            }
+        </script>
+    </head>
+
+
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="margin-left:20px">
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+                                </ul>
+                            </li>  
+							<li class="divider-vertical" style="margin-left:0px"></li>
+                            <li>
+								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                    <i class="icon-envelope" style="margin-top:8px"></i>
+                                </a>
+							</li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li style="margin-left:10px"><H4>Upcomming Events</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+        <div id="feeds">
+            <div class="loading">Loading Events</div>
+        </div>
+    </body>
+</html>

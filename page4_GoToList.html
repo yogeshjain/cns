@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script>
+            $(function() {
+                var lists = window.localStorage.getItem("lists");
+                lists = lists.split("@@");
+                for(var i=0;i<lists.length-1;i++){
+                    console.log(lists[i]);
+                    $('#listDD').append(
+                        $('<option></option').val(lists[i]).html(lists[i])
+                    );
+                }
+                var selectBox = $("select").selectBoxIt();
+            });
+        </script>
+        <script>
+            function gotoPage(choose){
+                var selected=choose.options[choose.selectedIndex].value;
+                if(selected != ""){
+                    window.location.href = "page5_ListWall.html?listname="+selected;	
+                }
+            }
+        </script>
+    </head>
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+											<ul class="dropdown-menu" style="margin-left:20px">
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+												<li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+											</ul>
+                            </li>
+							<li class="divider-vertical" style="margin-left:0px"></li>							
+                            <li>
+								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                    <i class="icon-envelope" style="margin-top:8px"></i>
+                                </a>
+							</li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li style="margin-left:10px"><H4>Select List</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+        <form>
+            <div class="row-fluid">
+                <div class="control-group">  
+                    <p style="color:white">Go to List</p>
+                    <div class="controls">
+                        <select multiple="multiple" id="listDD" class="combobox" onChange="gotoPage(this);">  
+                            
+                        </select>  
+                    </div>
+                </div>
+            </div> 
+        </form>
+    </body>
+</html>

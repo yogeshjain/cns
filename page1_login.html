@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>    <head>
+        <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+        <script src="bootstrap/js/jquery.js"></script>  
+        <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                var selectBox = $("select").selectBoxIt();
+                $("#loginbtn").click(function(){
+					
+                    var regno = $("#regno").val();
+                    var pass = $("#password").val();
+					
+                    $.ajax({
+                        url: 'http://192.168.92.1/mec/login.php?regid='+escape(regno)+'&pass='+escape(pass),
+                        dataType: 'json',
+                        timeout: 15000,
+                        success: function(data, status){
+                            console.log(data);
+                            data = data.split("%%")
+                            if(data[0]!="")
+                            {
+                                window.localStorage.setItem("regno", regno);
+                                window.localStorage.setItem("uname", data[0]);
+                                window.localStorage.setItem("role", data[1]);
+                                window.localStorage.setItem("lists", data[2]);
+                                window.location.href = "page3_Mainwall.html";
+								
+                            }
+                            else
+                            {
+                                alert("Login Failed");
+                            }
+                        },
+                        error: function (request, status, error) { 
+                            alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                        }	
+			
+                    });
+                });
+            });
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $("#clearbtn").click(function(){
+                    $("#regno").val("");
+                    $("#password").val("");
+                }); 
+            });
+        </script>
+    </head>
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div style="margin-left:85px">
+                        <ul class="nav" style="height:24px">  
+                            <li><H4>Login Page</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+        <div class="rwo-fluid">
+            <p style="color:white">Username:</p>
+            <input id="regno" type ="text" placeholder="username">
+        </div>
+        <div class="rwo-fluid">
+            <p style="color:white">Password:</p>
+            <input id="password" type="password" placeholder="Password">
+        </div>
+        <div class="rwo-fluid">
+            <button id="loginbtn" class="btn btn-success">Login</button>
+            <button id="clearbtn" class="btn btn-warning ">Clear</button>
+        </div>
+        <br>
+        <div class="rwo-fluid">
+            <a href="page2_passwordReset.html">Forgot password?</a>
+        </div>
+    </body>
+</html>

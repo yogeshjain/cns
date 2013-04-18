@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <style type="text/css">
+            .feedtitle{
+                display:block;
+                padding: 0px;
+                font-size: 20px;
+                font-weight: bold;
+                box-shadow: 0 0 2px black;
+                background-color:#ADADAD;
+            }
+            .feedbody{
+                display:block;
+                padding: 0px 5px 5px 10px;
+                font-size: 18px;
+            }
+        </style>
+        <script>
+            $(function() {
+
+                var selectBox = $("select").selectBoxIt();
+              
+                getListContent(gpbn("listname"));
+
+            });
+            
+            function gpbn(name)//get parameter by name
+            {
+                name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                var regexS = "[\\?&]" + name + "=([^&#]*)";
+                var regex = new RegExp(regexS);
+                var results = regex.exec(window.location.search);
+                if(results == null)
+                    return "";
+                else
+                    return decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+            
+            function getListContent(listname)
+            {
+                var regno = window.localStorage.getItem("regno");
+                $.ajax({
+                    url: 'http://192.168.92.1/mec/retrievePostByList.php?regno='+escape(regno)+'&listname='+escape(listname),
+                    dataType: 'json',
+                    timeout: 15000,
+                    success: function(data, status){
+                        var profs = data[0];
+                        var students = data[1];
+                        $("#proffeeds").html("");
+                        for(var i=0;i<profs.length;i++){
+                            var post = profs[i].split("%%");
+                            var feedbody = detectLinks(post[0]);
+                            $("#proffeeds").append('<div class="accordion-group" style="padding:0px 0px 10px 0px;"><div class="accordion-heading feedtitle"><div style="color:#000000;padding:0px;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion11"><img src="demo.jpg" class="img-rounded" style="height:60px;width:60px"></img>Prof.'+post[1]+'</div></div><p class="feedbody" style="margin-top:10px;">'+feedbody+'</div>');
+                        }
+                        $("#studfeeds").html("");
+                        for(var i=0;i<students.length;i++){
+                            var post = students[i].split("%%");
+                            var feedbody = detectLinks(post[0]);
+                            $("#studfeeds").append('<div class="accordion-group" style="padding:0px 0px 10px 0px;"><div class="accordion-heading feedtitle"><div style="color:#000000;padding:0px;" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion11"><img src="demo.jpg" class="img-rounded" style="height:60px;width:60px"></img>'+post[1]+'</div></div><p class="feedbody" style="margin-top:10px;">'+feedbody+'</div>');
+                        }
+                    },
+                    error: function (request, status, error) { 
+                        alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                    }	
+			
+                });
+            }
+            
+            function submitFeed()
+            {
+                var feedText = $("#feedText").val();
+                var list = gpbn("listname");
+                var regno = window.localStorage.getItem("regno");
+		
+                $.ajax({
+                    url: 'http://192.168.92.1/mec/postFeed.php?feed='+escape(feedText)+'&list='+escape(list)+'&regno='+escape(regno),
+                    dataType: 'json',
+                    timeout: 15000,
+                    success: function(data, status){
+                        console.log(data);
+                        if(data=="Success")
+                        {
+                            $("#feedText").val("");
+                            alert("Notice successfully posted");
+                        }
+                        else
+                        {
+                            alert("Notice submission failed. "+data);
+                        }
+                    },
+                    error: function (request, status, error) { 
+                        alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                    }	
+			
+                });
+            }
+        </script>
+    </head>
+
+
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="margin-left:20px">
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+                                </ul>
+                            </li>
+							<li class="divider-vertical" style="margin-left:0px"></li>
+                            <li>
+								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                    <i class="icon-envelope" style="margin-top:8px"></i>
+                                </a>
+							</li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li style="margin-left:10px"><H4>List Wall</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+            <div class="rwo-fluid">
+                <a class="btn" href="page6_createEvent.html">Add event</a>
+                <a class="btn" href="page7_upcommingEvent.html">Upcomming events</a>
+            </div>
+            <hr>
+            <div class="row-fluid">
+                <input type ="text" placeholder="Type notice here..." id="feedText">
+            </div>
+            <div class="row-fluid">
+                <button class="btn btn-success" onclick="submitFeed();">Post</button>
+            </div>
+            <br>
+            <div class="row-fluid">
+                <div class="accordion" id="accordion1">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                                Post By professors
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="accordion-body collapse">
+                            <div class="accordion-inner">
+
+                                <div class="accordion" id="accordion11">
+                                    <div class="row-fluid">
+                                        <div id="proffeeds" class="row-fluid">
+                                            <div class="loading">Loading Feeds</div>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion" id="accordion2">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                                Post By students
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="accordion-body collapse">
+                            <div class="accordion-inner">
+
+                                <div class="accordion" id="accordion11">
+                                    <div class="row-fluid">
+                                        <div id="studfeeds" class="row-fluid">
+                                            <div class="loading">Loading Feeds</div>
+                                        </div> 
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </body>
+</html>

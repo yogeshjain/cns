@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+		<link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+		<link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+		<link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+		
+		<script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+		<script src = "bootstrap/js/bootstrap.min.js"></script>
+		<script src="bootstrap/js/jquery.js"></script>  
+		<script src="bootstrap/js/bootstrap-dropdown.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+          <script>
+            $(document).ready(function(){
+				var selectBox = $("select").selectBoxIt();
+				
+				getProfile();
+				
+				$("#updateBtn").click(function(){
+					var scno = $("#scno").html();
+					var regno = $("#regno").html();
+					var name = $("#name").val();
+					var fname = $("#fname").val();
+					var date = $("#date").val();
+					var address = $("#address").val();
+					var emailid = $("#emailid").val();
+					var contact = $("#contact").val();
+					var year = $("#year").val();
+					var branch = $("#branch").val();
+					var div = $("#division").val();
+					var rno = $("#rno").val();
+					
+					$.ajax({
+					url: 'http://192.168.92.1/mec/psnlProf.php?scno='+escape(scno)+'&regno='+escape(regno)+'&name='+escape(name)+'&fname='+escape(fname)+ '&date='+escape(date) +'&address='+escape(address)+'&email='+escape(emailid)+'&contact='+escape(contact)+'&year='+escape(year)+'&branch='+escape(branch)+'&division='+escape(div)+'&rollno='+escape(rno),
+					dataType: 'json',
+					timeout: 15000,
+						success: function(data, status){
+							console.log(data);
+							if(data=="Success")
+							{
+								alert("Profile successfully updated");
+							}
+							else
+							{
+								alert(data);
+							}
+						},
+						error: function (request, status, error) { 
+							alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+						}	
+			
+					});
+				});
+			});
+			
+			function getProfile(){
+				var regno = window.localStorage.getItem("regno");
+				$.ajax({
+					url: 'http://192.168.92.1/mec/getPersonalProfile.php?regno='+escape(regno),
+					dataType: 'json',
+					timeout: 15000,
+						success: function(data, status){
+							console.log(data[0]);
+							$("#scno").html(data[0]['Smart_Card_No']);
+							$("#regno").html(data[0]['Reg_No']);
+							$("#name").val(data[0]['Stud_Name']);
+							$("#fname").val(data[0]['Fathers_Name']);
+							$("#date").val(data[0]['DOB'].split(" ")[0]);
+							$("#address").val(data[0]['Address']);
+							$("#emailid").val(data[0]['Email']);
+							$("#contact").val(data[0]['Telephone']);
+							$("#rno").val(data[0]['RollNo']);
+							console.log(data[0]['Yr']);
+							$("select#year").data("selectBox-selectBoxIt").selectOption(parseInt(data[0]['Yr']));
+							$("select#branch").data("selectBox-selectBoxIt").selectOption(data[0]['Branch_Nm']);
+							var div=0;
+							if(data[0]['Branch_Nm'] == 'COMPUTER ENGINEERING')
+								div = 2;
+							else if(data[0]['Branch_Nm'] == 'INFORMATION TECHNOLOGY')
+								div = 4;
+							else if(data[0]['Branch_Nm'] == 'ELECTRONICS AND TELECOMMUNICATION')
+								div = 6;
+							
+							if(data[0]['Div'] == "I"){
+								div += 1;
+							} else {
+								div +=2;
+							}
+							$("select#division").data("selectBox-selectBoxIt").selectOption(div);
+							
+						},
+						error: function (request, status, error) { 
+							alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+						}	
+			
+					});
+			}
+          </script>
+	</head>
+
+
+    <body class="well">
+		<div class="navbar navbar-fixed-top">  
+			<div class="navbar-inner">  
+				<div class="container">
+				<div class="pull-left">
+				<ul class="nav" style="height:24px">
+					<li class="dropleft" style="margin-left:20px">  
+						<button href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+							<i class="icon-align-justify" style="margin-top:6px"></i>
+						</button>
+						<ul class="dropdown-menu" style="margin-left:20px">
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+						</ul>
+					</li>  
+					<li class="divider-vertical" style="margin-left:0px"></li>
+					<li>
+						<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+							<i class="icon-envelope" style="margin-top:8px"></i>
+                        </a>
+					</li>
+					<li class="divider-vertical" style="margin-left:0px"></li>
+                    <li style="margin-left:10px"><H4>Personal Profile</H4></li>
+				</ul>
+				</div>
+				</div>  
+			</div>  
+		</div>
+		<hr>
+			<img src="demo.jpg" class="img-rounded" style="width:100px;height:100px"></img>
+			<br><br>
+			<div class="row-fluid">
+					<p style="color:white">Smart Card No:</p>
+					<span class="uneditable-input" id="scno"></span>
+					<p style="color:white">Registration No:</p>
+					<span class="uneditable-input" id="regno"></span>
+					<hr>
+					<p style="color:white">Name:</p>
+					<input type="text" id="name" placeholder="Enter Name"></input>
+					<p style="color:white">Father's Name:</p>
+					<input type="text" id="fname" placeholder="Enter Father's Name"></input>
+					<hr>
+					<p style="color:white">Date Of Birth:</p>
+					<input type="date" id="date"></input>
+					<p style="color:white">Address:</p>
+					<textarea rows="2" class="xxlarge" id="address" placeholder="Enter Address"></textarea>
+					<p style="color:white">Email-id:</p>
+					<input type="email" placeholder="Enter email id" id="emailid"></input>
+					<p style="color:white">Contact:</p>
+					<input type="text" id="contact" placeholder="Enter Contact No"></input>
+					<hr>
+				<div class="control-group">  
+				<p style="color:white">Year</p>
+				<div class="controls">
+					<select multiple="multiple" id="year">  
+					<option disabled>Year</option>  
+					<option value="FE">FE</option>  
+					<option value="SE">SE</option>  
+					<option value="TE">TE</option>
+					<option value="BE">BE</option>
+					</select>  
+				</div>  
+				</div>
+				<div class="control-group">  
+				<p style="color:white">Branch</p>
+				<div class="controls">
+					<select multiple="multiple" id="branch">  
+					<option disabled>Branch</option>  
+					<option value="ELECTRONICS ENGINEERING">Elecx</option>  
+					<option value="COMPUTER ENGINEERING">Comp</option>  
+					<option value="INFORMATION TECHNOLOGY">IT</option>
+					<option value="ELECTRONICS AND TELECOMMUNICATION">EXTC</option>
+					</select>  
+				</div>  
+				</div>
+				<div class="control-group">  
+				<p style="color:white">Division</p>
+				<div class="controls">
+					<select multiple="multiple" id="division">  
+					<option disabled>Division</option>  
+					<option value="1">1</option>  
+					<option value="2">2</option>  
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					</select>  
+				</div>  
+				</div>
+				<p style="color:white">Roll No:</p>
+				<input type="text" id="rno" placeholder="Enter Roll No"></input>
+			</div><hr>
+			<div class="row-fluid">
+				<button class="btn btn-primary" type="submit" id="updateBtn"> Update </button>
+				<a class="btn btn-info" href="page9_academicProfile.html">Acad profile</a>
+			</div>
+	<body>
+</html>

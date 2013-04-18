@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+        <script src="bootstrap/js/jquery.js"></script>  
+        <script src="bootstrap/js/bootstrap-dropdown.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                //retrive list names
+                var lists = window.localStorage.getItem("lists");
+                lists = lists.split("@@");
+                for(var i=0;i<lists.length-1;i++){
+                    console.log(lists[i]);
+                    $('#e_list').append(
+                        $('<option></option').val(lists[i]).html(lists[i])
+                    );
+                }
+
+                var selectBox = $("select").selectBoxIt();
+                $("#createEvent_btn").click(function(){
+                    var ename = $("#e_name").val();
+                    var desc = $("#e_desc").val();
+                    var edate = $("#e_date").val();
+                    var etime = $("#e_time").val();
+                    var org = $("#e_org").val();
+                    var list = $("#e_list").val();
+                    var regno = window.localStorage.getItem("regno");
+                    var arg;
+                    if(isNaN(regno)){//prof
+                        arg = '&regno='+escape(regno)+'&isProf=true';
+                    } else {
+                        arg = '';
+                    }
+			console.log(org+" "+arg);		
+                    $.ajax({
+                        url: 'http://192.168.92.1/mec/createEvent.php?ename='+escape(ename)+'&edate='+escape(edate)+'&etime='+escape(etime)+'&org='+escape(org)+'&list='+escape(list)+'&desc='+escape(desc)+arg,
+                        dataType: 'json',
+                        timeout: 15000,
+                        success: function(data, status){
+                            console.log(data);
+                            if(data=="Success")
+                            {
+                                alert("Event created successfully");
+                            }
+                            else
+                            {
+                                alert("Event creation failed");
+                            }
+                        },
+                        error: function (request, status, error) { 
+                            alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                        }	
+			
+                    });
+                });
+            });
+        </script>
+    </head>
+
+
+    <body class="well">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="margin-left:20px">
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+                                </ul>
+                            </li>
+							<li class="divider-vertical" style="margin-left:0px"></li>
+							<li>
+								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                    <i class="icon-envelope" style="margin-top:8px"></i>
+                                </a>
+							</li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li style="margin-left:10px"><H4>Create Event</H4></li>
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+
+        <div class="rwo-fluid">
+            <p style="color:white">Event Name:</p>
+            <input type ="text" placeholder="Event Name" id="e_name">
+        </div>
+        <div class="rwo-fluid">
+            <div>
+                <p style="color:white">Event Date:</p>
+                <input type="date" id="e_date">
+            </div>
+        </div>
+        <div class="rwo-fluid">
+            <p style="color:white">Event time:</p> 
+            <input type="time" id="e_time">
+        </div>
+        <hr>
+        <div class="rwo-fluid">
+            <p style="color:white">Organized by:</p>
+            <div class="control-group">  
+                <div class="controls">
+                    <select multiple="multiple" id="e_org">  
+                        <option disabled>Event by</option>
+                        <option>IEEE</link></option>  
+                        <option>ISTE</option>  
+                        <option>CSI</option>  
+                        <option>Other</option>
+                    </select>  
+                </div>  
+            </div>
+        </div>
+        <div class="rwo-fluid">
+            <p style="color:white">Event Description:</p>
+            <textarea name="Description" rows="2" placeholder="Event Description" id="e_desc"></textarea>
+        </div>
+        <div class="rwo-fluid">
+            <p style="color:white">Event published in:</p>
+            <select multiple="multiple" class="combobox" id="e_list">
+                <option disabled>Post on list of</option>
+            </select>
+        </div>
+        <br>
+        <div class="rwo-fluid">
+            <button class="btn btn-success" id="createEvent_btn">Create</button>
+            <input class="btn btn-danger" type="reset" value="Reset">
+        </div>          
+    </body>
+</html>

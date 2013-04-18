@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
+		<link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+		<link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+		<link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+		
+		<script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+		<script src = "bootstrap/js/bootstrap.min.js"></script>
+		<script src="bootstrap/js/jquery.js"></script>  
+		<script src="bootstrap/js/bootstrap-dropdown.js"></script>
+
+        <script src="bootstrap/js/jquery-ui.min.js"></script>
+        <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+          <script>
+              $(document).ready(function(){
+                  var selectBox = $("select").selectBoxIt();
+                  
+                  getAcadProfile();
+                  
+                  $("#updateBtn").click(function(){
+                      var isDiploma = window.localStorage.getItem("isDiploma");
+                      var regno = $("#regno").html();
+                      var ssc = $("#ssc").val();
+                      var ssct = $("#ssct").val();
+                      
+                      var url = 'http://192.168.92.1/mec/acadprofile.php?regno='+escape(regno)+'&ssc='+escape(ssc)+'&ssct='+escape(ssct);
+                      
+                      if(isDiploma == "true"){
+                          var dip1 = $("#dipyear1").val();
+                          var dip1t = $("#dipt1").val();
+                          var dip2 = $("#dipyear2").val();
+                          var dip2t = $("#dipt2").val();
+                          var dip3 = $("#dipyear3").val();
+                          var dip3t = $("#dipt3").val();
+                          var diptot = $("#diptot").html();
+                          var dipt = $("#dipt").html();
+                          var dipstdt = $("#dipStart").val();
+                          var dipendt = $("#dipEnd").val();
+                          url += '&diploma=true&dip1='+escape(dip1)+'&dip1t='+escape(dip1t)+'&dip2='+escape(dip2)+'&dip2t='+escape(dip2t)+'&dip3='+escape(dip3)+'&dip3t='+escape(dip3t)+'&diptot='+escape(diptot)+'&dipt='+escape(dipt)+'&dipst='+escape(dipstdt)+'&dipen='+escape(dipendt);
+                      } else {
+                          var hsc = $("#hsc").val();
+                          var hsct = $("#hsct").val();
+                          var sem1 = $("#sem1").val();
+                          var sem1t = $("#sem1t").val();
+                          var sem2 = $("#sem2").val();
+                          var sem2t = $("#sem2t").val();
+                          var hStart = $("#hStart").val();
+                          var hEnd = $("#hEnd").val();
+                          url+= '&diploma=false&hsc='+escape(hsc)+'&hsct='+escape(hsct)+'&sem1t='+escape(sem1t)+'&sem1='+escape(sem1)+'&sem2='+escape(sem2)+'&sem2t='+escape(sem2t)+'&hstart='+escape(hStart)+'&hend='+escape(hEnd);
+                      }
+                      
+                      
+                      var sem3 = $("#sem3").val();
+                      var sem3t = $("#sem3t").val();
+                      var sem4 = $("#sem4").val();
+                      var sem4t = $("#sem4t").val();
+                      var sem5 = $("#sem5").val();
+                      var sem5t = $("#sem5t").val();
+                      var sem6 = $("#sem6").val();
+                      var sem6t = $("#sem6t").val();
+                      var sem7 = $("#sem7").val();
+                      var sem7t = $("#sem7t").val();
+                      var sem8 = $("#sem8").val();
+                      var sem8t = $("#sem8t").val();
+                      
+                      var degree = $("#degree").val();
+                      var degreet = $("#degreet").val();
+                      var percentage = $("#percentage").val();
+                      var sStart = $("#sStart").val();
+                      var sEnd = $("#sEnd").val();
+                      var dStart= $("#dStart").val();
+                      var pgm = $("#pgm").val();
+                      var liveKt = $("#liveKt").val();
+                      var deadKt = $("#deadKt").val();
+                      var attempts = $("#attempts").val();
+                      url += '&sem3='+escape(sem3)+'&sem4='+escape(sem4)+'&sem5='+escape(sem5)+'&sem6='+escape(sem6)+'&sem7='+escape(sem7)+'&sem8='+escape(sem8)+'&sem3t='+escape(sem3t)+'&sem4t='+escape(sem4t)+'&sem5t='+escape(sem5t)+'&sem6t='+escape(sem6t)+'&sem7t='+escape(sem7t)+'&sem8t='+escape(sem8t)+'&degree='+escape(degree)+'&degreet='+escape(degreet)+'&percentage='+escape(percentage)+'&sstart='+escape(sStart)+'&send='+escape(sEnd)+'&dstart='+escape(dStart)+'&pgm='+escape(pgm)+'&livekt='+escape(liveKt)+'&deadkt='+escape(deadKt)+'&attempts='+escape(attempts);
+                      
+                      $.ajax({
+                          url: url,
+                          dataType: 'json',
+                          timeout: 15000,
+                          success: function(data, status){
+                              console.log(data);
+                              if(data=="Success")
+                              {
+                                  alert("Profile Successfully updated");
+                              }
+                              else
+                              {
+                                  alert(data);
+                              }
+                          },
+                          error: function (request, status, error) { 
+                              alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                          }	
+                          
+                      });
+                  });
+              });
+			
+function getAcadProfile(){
+    var regno = window.localStorage.getItem("regno");
+    //regno=9039; //diploma student
+    $.ajax({
+        url: 'http://192.168.92.1/mec/getAcademicProfile.php?regno='+escape(regno),
+        dataType: 'json',
+        timeout: 15000,
+        success: function(data, status){
+            console.log(data[0]);
+            $("#regno").html(data[0]['RegNo']);
+            $("#ssc").val(data[0]["SSC"]);
+            $("#ssct").val(data[0]["SSCOutOf"]);
+            $("#sscpercent").html(data[0]["SSCPercentage"]);
+            
+            
+            if(data[0]['DiplomaYear1'] != null && data[0]['DiplomaYear1'] != ""){
+                window.localStorage.setItem("isDiploma","true"); 
+                $(".degreeFields").hide();
+                $(".diplomaFields").show();
+                $("#dipyear1").val(data[0]['DiplomaYear1']);
+                $("#dipt1").val(data[0]['DiplomaYear1OutOf']);
+                $("#dipyear2").val(data[0]['DiplomaYear2']);
+                $("#dipt2").val(data[0]['DiplomaYear2OutOf']);
+                $("#dipyear3").val(data[0]['DiplomaYear3']);
+                $("#dipt3").val(data[0]['DiplomaYear3OutOf']);
+                $("#diptot").html(data[0]['Diploma']);
+                $("#dipt").html(data[0]['DiplomaOutOf']);
+                $("#dippercent").html(data[0]['DiplomaPercentage']);
+                $("#dipStart").val(data[0]['DiplomaStartDate'].split(" ")[0]);
+                $("#dipEnd").val(data[0]['DiplomaEndDate'].split(" ")[0]);
+            } else {
+                window.localStorage.setItem("isDiploma","false"); 
+                $(".degreeFields").show();
+                $(".diplomaFields").hide();
+                $("#hsc").val(data[0]['HSC']);
+                $("#hsct").val(data[0]['HSCOutOf']);
+                $("#hscpercent").html(data[0]['HSCPercentage']);
+                $("#sem1").val(data[0]['Sem1']);
+                $("#sem1t").val(data[0]['Sem1OutOf']);
+                $("#sem2").val(data[0]['Sem2']);
+                $("#sem2t").val(data[0]['Sem2OutOf']);
+                $("#hStart").val(data[0]['HSCStartDate'].split(" ")[0]);
+                $("#hEnd").val(data[0]['HSCEndDate'].split(" ")[0]);
+            }
+            
+            $("#sem3").val(data[0]['Sem3']);
+            $("#sem3t").val(data[0]['Sem3OutOf']);
+            $("#sem4").val(data[0]['Sem4']);
+            $("#sem4t").val(data[0]['Sem4OutOf']);
+            $("#sem5").val(data[0]['Sem5']);
+            $("#sem5t").val(data[0]['Sem5OutOf']);
+            $("#sem6").val(data[0]['Sem6']);
+            $("#sem6t").val(data[0]['Sem6OutOf']);
+            $("#sem7").val(data[0]['Sem7']);
+            $("#sem7t").val(data[0]['Sem7OutOf']);
+            $("#sem8").val(data[0]['Sem8']);
+            $("#sem8t").val(data[0]['Sem8OutOf']);
+            $("#degree").val(data[0]['Degree']);
+            $("#degreet").val(data[0]['DegreeOutOf']);
+            $("#percentage").val(data[0]['DegreePercentage']);
+            $("#sStart").val(data[0]['SSCStartDate'].split(" ")[0]);
+            $("#sEnd").val(data[0]['SSCEndDate'].split(" ")[0]);
+            
+            $("#dStart").val(data[0]['DegreeStartDate'].split(" ")[0]);
+            $("#pgm").val(data[0]['SoftwareSkills']);
+            $("#liveKt").val(data[0]['NoOfLiveKT']);
+            $("#deadKt").val(data[0]['NoOfDeadKT']);
+            $("#attempts").val(data[0]['NoTotalAttempts']);
+        },
+        error: function (request, status, error) { 
+            alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+        }	
+    });
+}
+          </script>
+	</head>
+    <body class="well">
+		<div class="navbar navbar-fixed-top">  
+			<div class="navbar-inner">  
+				<div class="container">
+				<div class="pull-left">
+				<ul class="nav" style="height:24px">
+					<li class="dropleft" style="margin-left:20px">  
+						<button class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+							<i class="icon-align-justify" style="margin-top:6px"></i>
+						</button>
+						<ul class="dropdown-menu" style="margin-left:20px">
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+							<li style="border-bottom: 1px solid #DBDBDB"><a href="page1_login.html">Logout</a></li>
+						</ul>
+					</li>
+					<li class="divider-vertical" style="margin-left:0px"></li>
+					<li>
+						<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+							<i class="icon-envelope" style="margin-top:8px"></i>
+                        </a>
+					</li>
+                    <li class="divider-vertical" style="margin-left:0px"></li>
+                    <li style="margin-left:10px"><H4>Academic Profile</H4></li>
+				</ul>
+				</div>
+				</div>  
+			</div>  
+		</div>
+		<hr>
+				<p style="color:white">Registration No:
+				<div class="input">
+					<span class="uneditable-input" id="regno"></span>
+				</div><hr>
+				<p style="color:white">SSC:
+				<div class="input">
+					<input type="text" id="ssc">
+				</div>
+				<p style="color:white">Out Of:
+				<div class="input">
+					<input type="text" id="ssct">
+				</div>
+				<p style="color:white">Percentage:
+				<div class="input">
+					<span class="uneditable-input" id="sscpercent"></span>
+				</div><hr>
+                                
+                                <div class="degreeFields">
+                                    <p style="color:white">HSC:
+                                    <div class="input">
+                                            <input type="text" id="hsc">
+                                    </div>
+                                    <p style="color:white">Out Of:
+                                    <div class="input">
+                                            <input type="text" id="hsct">
+                                    </div>
+                                    <p style="color:white">Percentage:
+                                    <div class="input">
+                                            <span class="uneditable-input" id="hscpercent"></span>
+                                    </div><hr>
+                                    <p style="color:white">Degree:
+                                    <p style="color:white">Sem1:
+                                    <div>
+                                            <input type="text" id="sem1">/<input type="text" id="sem1t">
+                                    </div>
+                                    <p style="color:white">Sem2:
+                                    <div>
+                                            <input type="text" id="sem2">/<input type="text" id="sem2t">
+                                    </div>
+                                </div>
+                                <div class="diplomaFields" style="display: none;">
+                                    
+                                    <p style="color:white">Diploma:<br>Year1:
+                                    <div class="input">
+                                            <input type="text" id="dipyear1">
+                                    </div>
+                                    <p style="color:white">Out Of:
+                                    <div class="input">
+                                            <input type="text" id="dipt1">
+                                    </div>
+                                    <p style="color:white">Year2:
+                                    <div class="input">
+                                            <input type="text" id="dipyear2">
+                                    </div>
+                                    <p style="color:white">Out Of:
+                                    <div class="input">
+                                            <input type="text" id="dipt2">
+                                    </div>
+                                    <p style="color:white">Year3:
+                                    <div class="input">
+                                            <input type="text" id="dipyear3">
+                                    </div>
+                                    <p style="color:white">Out Of:
+                                    <div class="input">
+                                            <input type="text" id="dipt3">
+                                    </div>
+                                    <p style="color:white">Diploma Total:
+                                    <div class="input">
+                                            <span class="uneditable-input" id="diptot"></span>
+                                    </div>
+                                    <p style="color:white">Out Of:
+                                    <div class="input">
+                                            <span class="uneditable-input" id="dipt"></span>
+                                    </div>
+                                    <p style="color:white">Percentage:
+                                    <div class="input">
+                                            <span class="uneditable-input" id="dippercent"></span>
+                                    </div><hr>
+                                    
+                                </div>
+                                
+				<p style="color:white">Sem3:
+				<div>
+					<input type="text" id="sem3">/<input type="text" id="sem3t">
+				</div>
+				<p style="color:white">Sem4:
+				<div>
+					<input type="text" id="sem4">/<input type="text" id="sem4t">
+				</div>
+				<p style="color:white">Sem5:
+				<div>
+					<input type="text" id="sem5">/<input type="text" id="sem5t">
+				</div>
+				<p style="color:white">Sem6:
+				<div>
+					<input type="text" id="sem6">/<input type="text" id="sem6t">
+				</div>
+				<p style="color:white">Sem7:
+				<div>
+					<input type="text" id="sem7">/<input type="text" id="sem7t">
+				</div>
+				<p style="color:white">Sem8:
+				<div>
+					<input type="text" id="sem8">/<input type="text" id="sem8t">
+				</div>
+				<p style="color:white">Total:
+				<div>
+					<input type="text" id="degree">
+				</div>
+				<p style="color:white">Out of:
+				<div>
+					<input type="text" id="degreet">
+				</div>
+				<p style="color:white">Percentage:
+				<div>
+					<input type="text" id="percentage">
+				</div>
+				<hr>
+				
+				<p style="color:white">SSC Start End Date:
+				<div>
+					<input type="date" id="sStart">
+					<input type="date" id="sEnd">
+				</div>
+                                <div class ="degreeFields">
+                                    <p style="color:white">HSC Start End Date:
+                                    <div>
+                                            <input type="date" id="hStart">
+                                            <input type="date" id="hEnd">
+                                    </div>
+                                </div>
+                                <div class ="diplomaFields" style="display: none;">
+                                    <p style="color:white">Diploma Start End Date:
+                                    <div>
+                                            <input type="date" id="dipStart">
+                                            <input type="date" id="dipEnd">
+                                    </div>
+                                </div>
+				<p style="color:white">Degree Start Date:
+				<div>
+					<input type="date" id="dStart">
+				</div>
+				<hr>
+				
+				<p style="color:white">Programming language known:
+				<div>
+					<textarea rows="3" id="pgm"></textarea>
+				</div>				
+				<p style="color:white">No of live KT:
+				<div>
+					<input type="text" id="liveKt">
+				</div>
+				<p style="color:white">No of dead KT:
+				<div>
+					<input type="text" id="deadKt">
+				</div>
+				<p style="color:white">Total no of attempts:
+				<div>
+					<input type="text" id="attempts">
+				</div>
+				<br>
+				<button class="btn btn-primary" id="updateBtn" type="submit">Update
+				</button>
+		</div>
+	<body>
+</html>
