@@ -29,7 +29,7 @@
                 $.ajax({
                     url: 'http://192.168.92.1/mec/postMsg.php?regno='+escape(regno)+'&message='+escape(message)+"&to="+escape(to),
                     dataType: 'json',
-                    timeout: 15000,
+                    timeout: 30000,
                     success: function(data, status){
                         if(data=="Success"){
                             alert("Message sent");

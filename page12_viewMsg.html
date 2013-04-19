@@ -27,7 +27,7 @@
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrieveDialog.php?regno='+escape(regno)+'&fname='+fname,
                     dataType: 'json',
-                    timeout: 15000,
+                    timeout: 30000,
                     success: function(data, status){
                         $("#messages").html("");
                         data = data.split("#$@");

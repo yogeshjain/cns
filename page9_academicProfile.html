@@ -80,7 +80,7 @@
                       $.ajax({
                           url: url,
                           dataType: 'json',
-                          timeout: 15000,
+                          timeout: 30000,
                           success: function(data, status){
                               console.log(data);
                               if(data=="Success")
@@ -106,7 +106,7 @@ function getAcadProfile(){
     $.ajax({
         url: 'http://192.168.92.1/mec/getAcademicProfile.php?regno='+escape(regno),
         dataType: 'json',
-        timeout: 15000,
+        timeout: 30000,
         success: function(data, status){
             console.log(data[0]);
             $("#regno").html(data[0]['RegNo']);

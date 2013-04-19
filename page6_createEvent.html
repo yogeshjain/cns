@@ -44,7 +44,7 @@
                     $.ajax({
                         url: 'http://192.168.92.1/mec/createEvent.php?ename='+escape(ename)+'&edate='+escape(edate)+'&etime='+escape(etime)+'&org='+escape(org)+'&list='+escape(list)+'&desc='+escape(desc)+arg,
                         dataType: 'json',
-                        timeout: 15000,
+                        timeout: 30000,
                         success: function(data, status){
                             console.log(data);
                             if(data=="Success")

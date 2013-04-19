@@ -45,7 +45,7 @@
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrievePost.php?regno='+escape(regno),
                     dataType: 'json',
-                    timeout: 15000,
+                    timeout: 30000,
                     success: function(data, status){
                         var profs = data[0];
                         var students = data[1];
@@ -78,7 +78,7 @@
                 $.ajax({
                     url: 'http://192.168.92.1/mec/postFeed.php?feed='+escape(feedText)+'&list='+escape(list)+'&regno='+escape(regno),
                     dataType: 'json',
-                    timeout: 15000,
+                    timeout: 30000,
                     success: function(data, status){
                         console.log(data);
                         if(data=="Success")

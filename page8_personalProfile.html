@@ -36,7 +36,7 @@
 					$.ajax({
 					url: 'http://192.168.92.1/mec/psnlProf.php?scno='+escape(scno)+'&regno='+escape(regno)+'&name='+escape(name)+'&fname='+escape(fname)+ '&date='+escape(date) +'&address='+escape(address)+'&email='+escape(emailid)+'&contact='+escape(contact)+'&year='+escape(year)+'&branch='+escape(branch)+'&division='+escape(div)+'&rollno='+escape(rno),
 					dataType: 'json',
-					timeout: 15000,
+					timeout: 30000,
 						success: function(data, status){
 							console.log(data);
 							if(data=="Success")
@@ -61,7 +61,7 @@
 				$.ajax({
 					url: 'http://192.168.92.1/mec/getPersonalProfile.php?regno='+escape(regno),
 					dataType: 'json',
-					timeout: 15000,
+					timeout: 30000,
 						success: function(data, status){
 							console.log(data[0]);
 							$("#scno").html(data[0]['Smart_Card_No']);
