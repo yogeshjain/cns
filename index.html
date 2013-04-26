@@ -9,6 +9,7 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
         <script>
             $(document).ready(function(){
                 var selectBox = $("select").selectBoxIt();
@@ -26,11 +27,11 @@
                             data = data.split("%%")
                             if(data[0]!="")
                             {
-                                window.localStorage.setItem("regno", regno);
-                                window.localStorage.setItem("uname", data[0]);
-                                window.localStorage.setItem("role", data[1]);
-                                window.localStorage.setItem("lists", data[2]);
-                                document.location = "page3_Mainwall.html";
+                                $.cookie("regno", regno);
+                                $.cookie("uname", data[0]);
+                                $.cookie("role", data[1]);
+                                $.cookie("lists", data[2]);
+                                window.location.href = "page3_Mainwall.html";
 								
                             }
                             else

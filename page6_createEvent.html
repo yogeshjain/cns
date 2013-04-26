@@ -13,16 +13,18 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <script>
             $(document).ready(function(){
                 //retrive list names
-                var lists = window.localStorage.getItem("lists");
+                var lists = $.cookie("lists");
                 lists = lists.split("@@");
                 for(var i=0;i<lists.length-1;i++){
                     console.log(lists[i]);
                     $('#e_list').append(
-                        $('<option></option').val(lists[i]).html(lists[i])
-                    );
+                    $('<option></option').val(lists[i]).html(lists[i])
+                );
                 }
 
                 var selectBox = $("select").selectBoxIt();
@@ -33,14 +35,14 @@
                     var etime = $("#e_time").val();
                     var org = $("#e_org").val();
                     var list = $("#e_list").val();
-                    var regno = window.localStorage.getItem("regno");
+                    var regno = $.cookie("regno");
                     var arg;
                     if(isNaN(regno)){//prof
                         arg = '&regno='+escape(regno)+'&isProf=true';
                     } else {
                         arg = '';
                     }
-			console.log(org+" "+arg);		
+                    console.log(org+" "+arg);		
                     $.ajax({
                         url: 'http://192.168.92.1/mec/createEvent.php?ename='+escape(ename)+'&edate='+escape(edate)+'&etime='+escape(etime)+'&org='+escape(org)+'&list='+escape(list)+'&desc='+escape(desc)+arg,
                         dataType: 'json',
@@ -87,12 +89,12 @@
                                     <li style="border-bottom: 1px solid #DBDBDB"><a href="index.html">Logout</a></li>
                                 </ul>
                             </li>
-							<li class="divider-vertical" style="margin-left:0px"></li>
-							<li>
-								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li>
+                                <a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
                                     <i class="icon-envelope" style="margin-top:8px"></i>
                                 </a>
-							</li>
+                            </li>
                             <li class="divider-vertical" style="margin-left:0px"></li>
                             <li style="margin-left:10px"><H4>Create Event</H4></li>
                         </ul>

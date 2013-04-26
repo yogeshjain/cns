@@ -2,28 +2,30 @@
 <html>
     <head>
         <link href = "bootstrap/css/bootstrap.min.css" rel = "stylesheet">
-		<link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
-		<link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
-		<link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
-		
-		<script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
-		<script src = "bootstrap/js/bootstrap.min.js"></script>
-		<script src="bootstrap/js/jquery.js"></script>  
-		<script src="bootstrap/js/bootstrap-dropdown.js"></script>
+        <link href = "bootstrap/css/bootstrap-responsive.min.css" rel = "stylesheet">
+        <link href = "bootstrap/css/bootstrap.css" rel = "stylesheet">
+        <link href = "bootstrap/css/jquery.selectBoxIt.css" rel="stylesheet">
+
+        <script src = "bootstrap/js/jquery-1.8.3.min.js"></script>
+        <script src = "bootstrap/js/bootstrap.min.js"></script>
+        <script src="bootstrap/js/jquery.js"></script>  
+        <script src="bootstrap/js/bootstrap-dropdown.js"></script>
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
-          <script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
+        <script>
             $(function() {
 
-              var selectBox = $("select").selectBoxIt();
+                var selectBox = $("select").selectBoxIt();
               
-              retriveMsgs();
+                retriveMsgs();
             });
             
             function retriveMsgs()
             {
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrieveMsgs.php?regno='+escape(regno),
                     dataType: 'json',
@@ -31,7 +33,7 @@
                     success: function(data, status){
                         $("#inbox").html("");
                         for (var key in data) {
-                             $("#inbox").append('<div style="width:100%; height: 50px; padding:2px; border: 1px solid white;"><a style="color:#000000;" href="page12_viewMsg.html?user='+escape(key)+'"><div style="display: inline-block;"><img src="demo.jpg" class="img-rounded" style="height:45px;width:45px"></div><div style="display: inline-block; max-width: 80%; margin-top: -10px;"><div style="line-height: 20px; position:relative; top:15px; height:20px; overflow: hidden;">'+key+'</div><div style="line-height: 20px; position:relative; top:15px; height:20px; overflow: hidden;">'+data[key]+'</div></div></a></div>');
+                            $("#inbox").append('<div style="width:100%; height: 50px; padding:2px; border: 1px solid white;"><a style="color:#000000;" href="page12_viewMsg.html?user='+escape(key)+'"><div style="display: inline-block;"><img src="demo.jpg" class="img-rounded" style="height:45px;width:45px"></div><div style="display: inline-block; max-width: 80%; margin-top: -10px;"><div style="line-height: 20px; position:relative; top:15px; height:20px; overflow: hidden;">'+key+'</div><div style="line-height: 20px; position:relative; top:15px; height:20px; overflow: hidden;">'+data[key]+'</div></div></a></div>');
                         }
                     },
                     error: function (request, status, error) { 
@@ -40,52 +42,52 @@
 			
                 });
             }
-          </script>
-	</head>
+        </script>
+    </head>
     <body class="well">
-		<div class="navbar navbar-fixed-top">  
-			<div class="navbar-inner">  
-				<div class="container">
-				<div class="pull-left">
-				<ul class="nav" style="height:24px">
-					<li class="dropleft" style="margin-left:20px">  
-						<button href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
-							<i class="icon-align-justify" style="margin-top:6px"></i>
-						</button>
-						<ul class="dropdown-menu" style="margin-left:25px;margin-top:20px">
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
-							<li style="border-bottom: 1px solid #DBDBDB"><a href="index.html">Logout</a></li>
-						</ul>
-					</li>  
-					<li class="divider-vertical" style="margin-left:0px"></li>
-							<li>
-								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+        <div class="navbar navbar-fixed-top">  
+            <div class="navbar-inner">  
+                <div class="container">
+                    <div class="pull-left">
+                        <ul class="nav" style="height:24px">
+                            <li class="dropleft" style="margin-left:20px">  
+                                <button href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" style="height:50px;width:50px;margin-top:-6px">
+                                    <i class="icon-align-justify" style="margin-top:6px"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="margin-left:25px;margin-top:20px">
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page3_Mainwall.html">Main Wall</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page4_GoToList.html">Lists</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page6_createEvent.html">Create Event</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page7_upcommingEvent.html">Upcomming Events</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page8_personalProfile.html">Personal profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page9_academicProfile.html">Academic Profile</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="page10_passwordChange.html">Change Password</a></li>
+                                    <li style="border-bottom: 1px solid #DBDBDB"><a href="index.html">Logout</a></li>
+                                </ul>
+                            </li>  
+                            <li class="divider-vertical" style="margin-left:0px"></li>
+                            <li>
+                                <a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
                                     <i class="icon-envelope" style="margin-top:8px"></i>
                                 </a>
-							</li>
+                            </li>
                             <li class="divider-vertical" style="margin-left:0px"></li>
                             <li style="margin-left:10px"><H4>Inbox</H4></li>
-					
-					
-				</ul>
-				</div>
-				</div>  
-			</div>  
-		</div>
-		<hr>
-		<div class="row-fluid">
-			<a class="btn pull-right" href="page13_composeMsg.html">Compose message</a>
-		</div>
-		<br>
-		<div class="row-fluid" id="inbox">  
-                    <div class="loading">Loading Messages</div>
-		</div>
-	</body>
+
+
+                        </ul>
+                    </div>
+                </div>  
+            </div>  
+        </div>
+        <hr>
+        <div class="row-fluid">
+            <a class="btn pull-right" href="page13_composeMsg.html">Compose message</a>
+        </div>
+        <br>
+        <div class="row-fluid" id="inbox">  
+            <div class="loading">Loading Messages</div>
+        </div>
+    </body>
 
 </html>

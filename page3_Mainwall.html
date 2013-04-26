@@ -10,6 +10,8 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <style type="text/css">
             .feedtitle{
                 display:block;
@@ -27,7 +29,7 @@
         </style>
         <script>
             $(function() {
-                var lists = window.localStorage.getItem("lists");
+                var lists = $.cookie("lists");
                 lists = lists.split("@@");
                 for(var i=0;i<lists.length-1;i++){
                     console.log(lists[i]);
@@ -41,7 +43,7 @@
             
             function retrivePosts()
             {
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrievePost.php?regno='+escape(regno),
                     dataType: 'json',
@@ -73,7 +75,7 @@
             {
                 var feedText = $("#feedText").val();
                 var list = $("#post_list").val();
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
 		
                 $.ajax({
                     url: 'http://192.168.92.1/mec/postFeed.php?feed='+escape(feedText)+'&list='+escape(list)+'&regno='+escape(regno),

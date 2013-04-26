@@ -10,6 +10,8 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <style type="text/css">
             .feedtitle{
                 display:block;
@@ -34,7 +36,7 @@
             
             function getEvents()
             {
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 var arg;
                 if(isNaN(regno)){//prof
                     arg = '?regno='+escape(regno)+'&isProf=true';
@@ -91,12 +93,12 @@
                                     <li style="border-bottom: 1px solid #DBDBDB"><a href="index.html">Logout</a></li>
                                 </ul>
                             </li>  
-							<li class="divider-vertical" style="margin-left:0px"></li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
                             <li>
-								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                <a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
                                     <i class="icon-envelope" style="margin-top:8px"></i>
                                 </a>
-							</li>
+                            </li>
                             <li class="divider-vertical" style="margin-left:0px"></li>
                             <li style="margin-left:10px"><H4>Upcomming Events</H4></li>
                         </ul>

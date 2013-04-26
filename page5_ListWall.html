@@ -10,6 +10,8 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <style type="text/css">
             .feedtitle{
                 display:block;
@@ -48,7 +50,7 @@
             
             function getListContent(listname)
             {
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrievePostByList.php?regno='+escape(regno)+'&listname='+escape(listname),
                     dataType: 'json',
@@ -80,7 +82,7 @@
             {
                 var feedText = $("#feedText").val();
                 var list = gpbn("listname");
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
 		
                 $.ajax({
                     url: 'http://192.168.92.1/mec/postFeed.php?feed='+escape(feedText)+'&list='+escape(list)+'&regno='+escape(regno),
@@ -129,12 +131,12 @@
                                     <li style="border-bottom: 1px solid #DBDBDB"><a href="index.html">Logout</a></li>
                                 </ul>
                             </li>
-							<li class="divider-vertical" style="margin-left:0px"></li>
+                            <li class="divider-vertical" style="margin-left:0px"></li>
                             <li>
-								<a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
+                                <a href="page11_inbox.html" class="btn btn-info" style="height:29px;width:20px;margin-top:-6px;margin-left:-9px">
                                     <i class="icon-envelope" style="margin-top:8px"></i>
                                 </a>
-							</li>
+                            </li>
                             <li class="divider-vertical" style="margin-left:0px"></li>
                             <li style="margin-left:10px"><H4>List Wall</H4></li>
                         </ul>
@@ -143,63 +145,63 @@
             </div>  
         </div>
         <hr>
-            <div class="rwo-fluid">
-                <a class="btn" href="page6_createEvent.html">Add event</a>
-                <a class="btn" href="page7_upcommingEvent.html">Upcomming events</a>
-            </div>
-            <hr>
-            <div class="row-fluid">
-                <input type ="text" placeholder="Type notice here..." id="feedText">
-            </div>
-            <div class="row-fluid">
-                <button class="btn btn-success" onclick="submitFeed();">Post</button>
-            </div>
-            <br>
-            <div class="row-fluid">
-                <div class="accordion" id="accordion1">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
-                                Post By professors
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-
-                                <div class="accordion" id="accordion11">
-                                    <div class="row-fluid">
-                                        <div id="proffeeds" class="row-fluid">
-                                            <div class="loading">Loading Feeds</div>
-                                        </div> 
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+        <div class="rwo-fluid">
+            <a class="btn" href="page6_createEvent.html">Add event</a>
+            <a class="btn" href="page7_upcommingEvent.html">Upcomming events</a>
+        </div>
+        <hr>
+        <div class="row-fluid">
+            <input type ="text" placeholder="Type notice here..." id="feedText">
+        </div>
+        <div class="row-fluid">
+            <button class="btn btn-success" onclick="submitFeed();">Post</button>
+        </div>
+        <br>
+        <div class="row-fluid">
+            <div class="accordion" id="accordion1">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne">
+                            Post By professors
+                        </a>
                     </div>
-                </div>
-                <div class="accordion" id="accordion2">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                Post By students
-                            </a>
-                        </div>
-                        <div id="collapseTwo" class="accordion-body collapse">
-                            <div class="accordion-inner">
+                    <div id="collapseOne" class="accordion-body collapse">
+                        <div class="accordion-inner">
 
-                                <div class="accordion" id="accordion11">
-                                    <div class="row-fluid">
-                                        <div id="studfeeds" class="row-fluid">
-                                            <div class="loading">Loading Feeds</div>
-                                        </div> 
-                                    </div>
+                            <div class="accordion" id="accordion11">
+                                <div class="row-fluid">
+                                    <div id="proffeeds" class="row-fluid">
+                                        <div class="loading">Loading Feeds</div>
+                                    </div> 
                                 </div>
-
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="accordion" id="accordion2">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a style="color:#000000" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                            Post By students
+                        </a>
+                    </div>
+                    <div id="collapseTwo" class="accordion-body collapse">
+                        <div class="accordion-inner">
+
+                            <div class="accordion" id="accordion11">
+                                <div class="row-fluid">
+                                    <div id="studfeeds" class="row-fluid">
+                                        <div class="loading">Loading Feeds</div>
+                                    </div> 
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

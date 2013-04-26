@@ -13,6 +13,8 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <script>
             $(function() {
 
@@ -23,7 +25,7 @@
             
             function retriveDialog(fname)
             {
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 $.ajax({
                     url: 'http://192.168.92.1/mec/retrieveDialog.php?regno='+escape(regno)+'&fname='+fname,
                     dataType: 'json',
@@ -40,6 +42,30 @@
                                 by = 'you';
                             }
                             $("#messages").append('<div class="accordion-group"><div class="accordion-heading"><div style="color:#000000" class="accordion-toggle" data-parent="#accordion2"></div></div><div style="margin-left:25px"><p>'+message+'</p><h6>By '+by+'</h6></div></div>');
+                        }
+                    },
+                    error: function (request, status, error) { 
+                        alert(request.responseText+" * "+request.status+" * "+status+" * "+error);
+                    }	
+			
+                });
+            }
+            
+            function sendMessage(){
+                var message = $("#e_desc").val();
+                var to = gpbn('user');
+                var regno = $.cookie("regno");
+                
+                
+                $.ajax({
+                    url: 'http://192.168.92.1/mec/postMsg.php?regno='+escape(regno)+'&message='+escape(message)+"&to="+escape(to),
+                    dataType: 'json',
+                    timeout: 30000,
+                    success: function(data, status){
+                        if(data=="Success"){
+                            alert("Message sent");
+                        } else {
+                            alert(data);
                         }
                     },
                     error: function (request, status, error) { 
@@ -109,7 +135,12 @@
             <div class="accordion" id="messages">
                 <div class="loading">Loading conversation</div>
             </div>
-            
+            <div class="row-fluid" style="border: 10x white solid;">
+                <input type ="text" placeholder="Type msg here" id="e_desc">
+            </div>
+            <div class="row-fluid">
+                <button id="postMsg" class="btn btn-success" onclick="sendMessage();">Send</button>
+            </div>
         </div>
     </body>
 </html>

@@ -13,6 +13,8 @@
 
         <script src="bootstrap/js/jquery-ui.min.js"></script>
         <script src="bootstrap/js/jquery.selectBoxIt.min.js"></script>
+        <script src="bootstrap/js/jquery.cookie.js"></script>
+
         <script>
             $(function() {
 
@@ -23,7 +25,7 @@
             function sendMessage(){
                 var message = $("#e_desc").val();
                 var to = $("#e_name").val();
-                var regno = window.localStorage.getItem("regno");
+                var regno = $.cookie("regno");
                 
                 
                 $.ajax({
